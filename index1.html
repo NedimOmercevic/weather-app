@@ -1,76 +1,71 @@
 <!DOCTYPE html>
-
-<html>
-<head>
-    <title>Weather App</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-
-</html>
-
-<html>
-<head>
-    <title>Weather App</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    
-
-    <div id="login-form">
-     
-    </div>
-    
-    <div id="register-form">
-       
-    </div>
-
-    
-</body>
-</html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Include Bootstrap CSS if you're using Bootstrap classes -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <header>
         <h1>Weather App</h1>
     </header>
+
     <main>
-        <section id="weather">
-            <h2>Current Weather</h2>
-            
+        <section class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-md-8 col-lg-6 col-xl-4">
+                    <h3 class="mb-4 pb-2 fw-normal">Check the weather forecast</h3>
+                    <div class="input-group rounded mb-3">
+                        <input type="search" class="form-control rounded" placeholder="City" aria-label="Search"
+                            aria-describedby="search-addon" />
+                        <button id="checkWeatherBtn" type="button">
+                            <span class="input-group-text border-0 fw-bold" id="search-addon">
+                                Check!
+                            </span>
+                        </button>
+                    </div>
+                    <!-- Temperature and other details will be updated here -->
+                    <div class="card shadow-0 border">
+                        <div class="card-body p-4">
+                            <p class="mb-0">Weather details will be shown here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
+
     <footer>
         <p>Weather App © 2024</p>
     </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('checkWeatherBtn').addEventListener('click', function() {
+            const cityName = document.querySelector('.form-control').value;
+            fetchWeather(cityName);
+        });
+
+        function fetchWeather(cityName) {
+            const apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`;
+
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('.card-body').innerHTML = `
+                    <h4 class="mb-1 sfw-normal">${data.name}, ${data.sys.country}</h4>
+                    <p class="mb-2">Current temperature: <strong>${data.main.temp}°C</strong></p>
+                    <p>Feels like: <strong>${data.main.feels_like}°C</strong></p>
+                    <p>Max: <strong>${data.main.temp_max}°C</strong>, Min: <strong>${data.main.temp_min}°C</strong></p>
+                    <p>${data.weather[0].main}</p>
+                `;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
 </body>
 </html>
-
-<div id="login-form">
-    <h2>Login</h2>
-    <form action="/login" method="post">
-        <label for="login-email">Email:</label>
-        <input type="email" id="login-email" name="email" required>
-        <label for="login-password">Password:</label>
-        <input type="password" id="login-password" name="password" required>
-        <button type="submit">Login</button>
-    </form>
-</div>
-
-<div id="register-form">
-    <h2>Register</h2>
-    <form action="/register" method="post">
-        <label for="register-email">Email:</label>
-        <input type="email" id="register-email" name="email" required>
-        <label for="register-password">Password:</label>
-        <input type="password" id="register-password" name="password" required>
-        <button type="submit">Register</button>
-    </form>
-</div>
